@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1771239392550,
+      "tag": "0000_free_ted_forrester",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771242607135,
+      "tag": "0001_thick_dragon_lord",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771609685530,
+      "tag": "0002_fancy_human_cannonball",
+      "breakpoints": true
+    }
+  ]
+}
