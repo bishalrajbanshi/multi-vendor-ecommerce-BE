@@ -42,19 +42,29 @@ export class RoleRepository {
 
   async findMany(
     search?: string,
+    page = 1,
     limit = 10,
-    offset = 0,
   ){
-    const query = this.drizzle.client
-    .select()
-    .from(roleTable)
-    .limit(limit)
-    .offset(offset);
+    const offset = (page - 1) * limit;
+    let whereClause = undefined;
     if (search) {
-      query.where(like(roleTable.name,`%${search}%`));
+      whereClause = like(roleTable.name, `%${search}%`);
+    }
+    const [totalRecordsResult] = await this.drizzle.client
+      .select({ count: this.drizzle.client.fn.count(roleTable.id) })
+      .from(roleTable)
+      .where(whereClause);
+    const totalRecords = totalRecordsResult?.count || 0;
+    const query = this.drizzle.client
+      .select()
+      .from(roleTable)
+      .limit(limit)
+      .offset(offset);
+    if (whereClause) {
+      query.where(whereClause);
     }
     const roles = await query;
-    return roles;
+    return [roles, totalRecords];
   }
 
 }
