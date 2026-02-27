@@ -5,29 +5,34 @@ import {
   Logger,
 } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import postgres, { Sql } from 'postgres';
 import * as schema from './schema/index';
-import { pgSchemaList } from './pgSchema';
 
 @Injectable()
 export class DrizzleService implements OnModuleInit, OnModuleDestroy {
-  private logger = new Logger(DrizzleService.name);
+  private readonly logger = new Logger(DrizzleService.name);
   public client!: ReturnType<typeof drizzle>;
   private pgSql!: ReturnType<typeof postgres>;
 
   async onModuleInit() {
+    this.logger.log('Initializing Drizzle ORM...');
+    const maxPoolSize = parseInt(process.env.DB_MAX_POOL || '20', 10);
     try {
-
-      this.logger.log('Initializing Drizzle ORM...');
       this.pgSql = postgres(process.env.DATABASE_URL!, {
-        max: 10,
+        max: maxPoolSize,
         ssl:
           process.env.NODE_ENV === 'production'
             ? { rejectUnauthorized: false }
             : undefined,
+        timeout: 0,
+        idle_timeout: 30_000,
+        onnotice: (notice) => this.logger.warn(`DB Notice: ${notice.message}`),
       });
+
       this.client = drizzle(this.pgSql, { schema });
-      this.logger.log('Drizzle ORM initialized successfully');
+      this.logger.log(
+        `Drizzle ORM initialized successfully with pool size ${maxPoolSize}`,
+      );
     } catch (error) {
       this.logger.error('Failed to initialize Drizzle ORM', error);
       throw error;
@@ -37,8 +42,12 @@ export class DrizzleService implements OnModuleInit, OnModuleDestroy {
   async onModuleDestroy() {
     if (this.pgSql) {
       this.logger.log('Closing Drizzle ORM connection...');
-      await this.pgSql.end();
-      this.logger.log('Drizzle ORM connection closed');
+      try {
+        await this.pgSql.end();
+        this.logger.log('Drizzle ORM connection closed');
+      } catch (error) {
+        this.logger.error('Error while closing Drizzle ORM', error);
+      }
     }
   }
 }
