@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { RoleRepository } from './role.repository';
-import { RoleInsert } from './role.type';
+import { RoleInsert, RoleUpdate } from './role.type';
 
 @Injectable()
 export class RoleService {
@@ -10,11 +10,31 @@ export class RoleService {
     return await this.repository.create(payload);
   }
 
-  async updateService(id: string, payload: RoleInsert) {
+  async updateService(id: string, payload: RoleUpdate) {
     const role = await this.repository.findOne(id);
     if (!role) {
       throw new BadRequestException(`Role with ${id} not found`);
     }
     return await this.repository.update(id, payload);
+  }
+
+  async findOneService(id: string) {
+    const role = await this.repository.findOne(id);
+    if (!role) {
+      throw new BadRequestException(`Role with ${id} not found`);
+    }
+    return role;
+  }
+
+  async deleteOneService(id: string) {
+    const role = await this.repository.findOne(id);
+    if (!role) {
+      throw new BadRequestException(`Role with ${id} not found`);
+    }
+    return await this.repository.deleteOne(id);
+  }
+
+  async findManyService(search?: string, limit = 10, offset = 0) {
+    return await this.repository.findMany(search, limit, offset);
   }
 }
