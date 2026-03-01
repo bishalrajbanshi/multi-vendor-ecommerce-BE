@@ -10,6 +10,7 @@ export const roleTable = authSchema.table('roles', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 255 }).notNull(),
   status: boolean('status').notNull().default(true),
+  deleted:boolean('deleted').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(), 
 });

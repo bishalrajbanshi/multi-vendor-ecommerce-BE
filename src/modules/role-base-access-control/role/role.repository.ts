@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Role, RoleInsert, RoleUpdate } from './role.type';
+import { RoleInsert, RoleUpdate } from './role.type';
 import { DrizzleService } from 'src/core/drizzle/drizzle.service';
 import { roleTable } from 'src/core/drizzle/schema';
 import { eq, like } from 'drizzle-orm';
@@ -32,29 +32,24 @@ export class RoleRepository {
     return role || null;
   }
 
-  async deleteOne(id:string){
+  async deleteOne(id: string) {
     const [role] = await this.drizzle.client
-    .delete(roleTable)
-    .where(eq(roleTable.id, id))
-    .returning();
+      .update(roleTable)
+      .set({ deleted: true })
+      .where(eq(roleTable.id, id))
+      .returning();
     return role || null;
   }
 
-  async findMany(
-    search?: string,
-    limit = 10,
-    offset = 0,
-  ){
-    const query = this.drizzle.client
-    .select()
-    .from(roleTable)
-    .limit(limit)
-    .offset(offset);
-    if (search) {
-      query.where(like(roleTable.name,`%${search}%`));
-    }
-    const roles = await query;
-    return roles;
+  async findMany(params: { search?: string; page: number; perPage: number }) {
+    const query = await this.drizzle.client
+      .select()
+      .from(roleTable)
+      .where(
+        params.search ? like(roleTable.name, `%${params.search}%`) : undefined,
+      )
+      .limit(params.perPage)
+      .offset((params.page - 1) * params.perPage);
+    return query;
   }
-
 }

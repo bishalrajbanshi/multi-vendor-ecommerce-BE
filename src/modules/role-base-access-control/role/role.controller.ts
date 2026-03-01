@@ -6,10 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { RoleCreateDto } from './dto/role.create.dto';
 import { RoleService } from './role.service';
 import { RoleUpdateDto } from './dto/role.update.dto';
+import { queryRoleDto } from './dto/query.role.dto';
+import { paginateData } from 'src/core/helper/pagination.helper';
 
 @Controller('role')
 export class RoleController {
@@ -40,13 +43,22 @@ export class RoleController {
   }
 
   @Get()
-  async findMany(
-    @Param('search') search?: string,
-    @Param('limit') limit = 10,
-    @Param('offset') offset = 0,
-  ) {
+  async findMany(@Query() parmas: queryRoleDto) {
+    const { page, perPage } = parmas;
+    const data = await this.service.findManyService({
+      search: parmas.search,
+      page: Number(page) || 1,
+      perPage: Number(perPage) || 10,
+    });
+
+    const pagination = paginateData(
+      data.length,
+      Number(page) || 1,
+      Number(perPage) || 10,
+    );
     return {
-      data: await this.service.findManyService(search, limit, offset),
+      data: data,
+      pagination,
       message: 'Roles found successfully',
     };
   }

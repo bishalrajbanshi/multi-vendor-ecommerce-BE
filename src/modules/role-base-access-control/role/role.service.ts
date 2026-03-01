@@ -34,7 +34,11 @@ export class RoleService {
     return await this.repository.deleteOne(id);
   }
 
-  async findManyService(search?: string, limit = 10, offset = 0) {
-    return await this.repository.findMany(search, limit, offset);
+  async findManyService(params: {
+    search?: string;
+    page: number;
+    perPage: number;
+  }) {
+    return await this.repository.findMany(params);
   }
 }
