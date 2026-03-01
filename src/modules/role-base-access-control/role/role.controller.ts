@@ -26,8 +26,8 @@ export class RoleController {
   @Patch(':id')
   async update(@Param() id: string, @Body() payload: RoleUpdateDto) {
     return {
-      data: await this.service.updateService(id, payload),
       message: 'Role updated successfully',
+      data: await this.service.updateService(id, payload),
     };
   }
 
@@ -40,9 +40,13 @@ export class RoleController {
   }
 
   @Get()
-  async findMany() {
+  async findMany(
+    @Param('search') search?: string,
+    @Param('limit') limit = 10,
+    @Param('offset') offset = 0,
+  ) {
     return {
-      data: await this.service.findManyService(),
+      data: await this.service.findManyService(search, limit, offset),
       message: 'Roles found successfully',
     };
   }
