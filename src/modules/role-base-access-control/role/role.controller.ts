@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -20,14 +21,14 @@ export class RoleController {
 
   @Post()
   async create(@Body() payload: RoleCreateDto) {
-    return {
-      data: await this.service.createService(payload),
-      message: 'Role created successfully',
-    };
+   return this.service.createService(payload);
   }
 
   @Patch(':id')
-  async update(@Param() id: string, @Body() payload: RoleUpdateDto) {
+  async update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() payload: RoleUpdateDto,
+  ) {
     return {
       message: 'Role updated successfully',
       data: await this.service.updateService(id, payload),
@@ -35,7 +36,7 @@ export class RoleController {
   }
 
   @Get(':id')
-  async findOne(@Param() id: string) {
+  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return {
       data: await this.service.findOneService(id),
       message: 'Role found successfully',
@@ -64,7 +65,9 @@ export class RoleController {
   }
 
   @Delete(':id')
-  async deleteOne(@Param() id: string) {
+  async deleteOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
     return {
       data: await this.service.deleteOneService(id),
       message: 'Role deleted successfully',

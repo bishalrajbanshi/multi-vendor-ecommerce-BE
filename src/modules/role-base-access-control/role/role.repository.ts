@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RoleInsert, RoleUpdate } from './role.type';
 import { DrizzleService } from 'src/core/drizzle/drizzle.service';
 import { roleTable } from 'src/core/drizzle/schema';
-import { eq, like } from 'drizzle-orm';
+import { eq, like, and } from 'drizzle-orm';
 @Injectable()
 export class RoleRepository {
   constructor(private readonly drizzle: DrizzleService) {}
@@ -18,7 +18,7 @@ export class RoleRepository {
     const [role] = await this.drizzle.client
       .update(roleTable)
       .set(payload)
-      .where(eq(roleTable.id, id))
+      .where(and(eq(roleTable.id, id), eq(roleTable.deleted, false)))
       .returning();
     return role || null;
   }
@@ -27,7 +27,7 @@ export class RoleRepository {
     const [role] = await this.drizzle.client
       .select()
       .from(roleTable)
-      .where(eq(roleTable.id, id))
+      .where(and(eq(roleTable.id, id), eq(roleTable.deleted, false)))
       .limit(1);
     return role || null;
   }
@@ -36,7 +36,7 @@ export class RoleRepository {
     const [role] = await this.drizzle.client
       .update(roleTable)
       .set({ deleted: true })
-      .where(eq(roleTable.id, id))
+      .where(and(eq(roleTable.id, id), eq(roleTable.deleted, false)))
       .returning();
     return role || null;
   }
@@ -46,7 +46,12 @@ export class RoleRepository {
       .select()
       .from(roleTable)
       .where(
-        params.search ? like(roleTable.name, `%${params.search}%`) : undefined,
+        and(
+          params.search
+            ? like(roleTable.name, `%${params.search}%`)
+            : undefined,
+          eq(roleTable.deleted, false),
+        ),
       )
       .limit(params.perPage)
       .offset((params.page - 1) * params.perPage);
