@@ -18,7 +18,7 @@ export class RoleRepository {
     const [role] = await this.drizzle.client
       .update(roleTable)
       .set(payload)
-      .where(and(eq(roleTable.id, id), eq(roleTable.deleted, false)))
+      .where(eq(roleTable.id, id))
       .returning();
     return role || null;
   }
@@ -27,8 +27,7 @@ export class RoleRepository {
     const [role] = await this.drizzle.client
       .select()
       .from(roleTable)
-      .where(and(eq(roleTable.id, id), eq(roleTable.deleted, false)))
-      .limit(1);
+      .where(eq(roleTable.id, id));
     return role || null;
   }
 
@@ -36,7 +35,7 @@ export class RoleRepository {
     const [role] = await this.drizzle.client
       .update(roleTable)
       .set({ deleted: true })
-      .where(and(eq(roleTable.id, id), eq(roleTable.deleted, false)))
+      .where(eq(roleTable.id, id))
       .returning();
     return role || null;
   }
