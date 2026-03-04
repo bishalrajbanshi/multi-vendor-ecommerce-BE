@@ -93,6 +93,7 @@ export class UserRepository {
       .select()
       .from(userTable)
       .where(eq(userTable.phone, phone))
+      .leftJoin(userProfileTable, eq(userProfileTable.userId, userTable.id))
       .limit(1);
     return record || null;
   }
