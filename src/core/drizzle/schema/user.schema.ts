@@ -1,14 +1,14 @@
-import { table } from 'console';
 import {
   pgSchema,
-  pgTable,
   uuid,
   varchar,
   boolean,
   timestamp,
   index,
   uniqueIndex,
+  pgEnum
 } from 'drizzle-orm/pg-core';
+export const GenderEnum = pgEnum('gender', ['male', 'female', 'other']);
 
 export const userSchema = pgSchema('users');
 
@@ -36,22 +36,53 @@ export const userTable = userSchema.table(
   },
 );
 
-export const userCredentiaslTable = userSchema.table('user_credentials', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id')
-    .notNull()
-    .references(() => userTable.id, { onDelete: 'cascade' }),
-  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-},
-(table) => {
-  return {
-      userIdUnique: uniqueIndex('user_credentials_user_id_unique').on(table.userId),
-  }
-}
+export const userProfileTable = userSchema.table(
+  'user_profiles',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => userTable.id, { onDelete: 'cascade' }),
+    fullName: varchar('full_name', { length: 255 }).notNull(),
+    profile: varchar('profile', { length: 255 }),
+    dob: timestamp('dob', { withTimezone: true }),
+    gender: GenderEnum('gender'),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdUnique: uniqueIndex('user_profiles_user_id_unique').on(
+        table.userId,
+      ),
+    };
+  },
+);
+
+export const userCredentiaslTable = userSchema.table(
+  'user_credentials',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => userTable.id, { onDelete: 'cascade' }),
+    passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdUnique: uniqueIndex('user_credentials_user_id_unique').on(
+        table.userId,
+      ),
+    };
+  },
 );

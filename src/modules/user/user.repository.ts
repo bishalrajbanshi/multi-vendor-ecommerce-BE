@@ -2,7 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { DrizzleService } from 'src/core/drizzle/drizzle.service';
 import { passwordService } from 'src/core/utils/hash-passowrd.service';
 import { CreateUserInput, UserUpdate } from './user.type';
-import { userCredentiaslTable, userTable } from 'src/core/drizzle/schema';
+import {
+  GenderEnum,
+  userCredentiaslTable,
+  userProfileTable,
+  userTable,
+} from 'src/core/drizzle/schema';
 import { eq, or } from 'drizzle-orm';
 
 @Injectable()
@@ -29,6 +34,16 @@ export class UserRepository {
       await tx.insert(userCredentiaslTable).values({
         userId: user.id,
         passwordHash: hashedPassword,
+      });
+
+      await tx.insert(userProfileTable).values({
+        userId: user.id,
+        fullName: payload.fullName,
+        profile: payload.profile || null,
+        dob: payload.dob || null,
+        gender: payload.gender
+          ? (payload.gender as 'male' | 'female' | 'other')
+          : null,
       });
     });
   }
