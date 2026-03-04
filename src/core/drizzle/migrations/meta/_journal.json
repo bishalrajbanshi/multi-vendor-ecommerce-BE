@@ -43,6 +43,13 @@
       "when": 1772603645361,
       "tag": "0005_oval_glorian",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1772628425059,
+      "tag": "0006_milky_stellaris",
+      "breakpoints": true
     }
   ]
 }

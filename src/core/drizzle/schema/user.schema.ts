@@ -8,7 +8,8 @@ import {
   uniqueIndex,
   pgEnum
 } from 'drizzle-orm/pg-core';
-export const GenderEnum = pgEnum('gender', ['male', 'female', 'other']);
+import { Gender } from 'src/modules/user/user.type';
+export const GenderEnum = pgEnum('gender', Gender);
 
 export const userSchema = pgSchema('users');
 

@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { PgEnum } from 'drizzle-orm/pg-core';
 import { GenderEnum } from 'src/core/drizzle/schema';
+import { Gender } from '../user.type';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -50,6 +51,6 @@ export class CreateUserDto {
     example: 'male',
   })
   @IsOptional()
-  @IsEnum(Object.keys(GenderEnum))
-  gender?: keyof typeof GenderEnum;
+  @IsEnum(Object.values(Gender))
+  gender?:Gender;
 }

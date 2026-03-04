@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DrizzleService } from 'src/core/drizzle/drizzle.service';
 import { passwordService } from 'src/core/utils/hash-passowrd.service';
-import { CreateUserInput, UserUpdate } from './user.type';
+import { CreateUserInput, UserUpdate } from '../user.type';
 import {
   GenderEnum,
   userCredentiaslTable,
@@ -41,9 +41,7 @@ export class UserRepository {
         fullName: payload.fullName,
         profile: payload.profile || null,
         dob: payload.dob || null,
-        gender: payload.gender
-          ? (payload.gender as 'male' | 'female' | 'other')
-          : null,
+        gender: payload.gender,
       });
     });
   }
