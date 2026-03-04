@@ -9,13 +9,21 @@ import {
   userTable,
 } from 'src/core/drizzle/schema';
 import { eq, or } from 'drizzle-orm';
-
 @Injectable()
 export class UserRepository {
   constructor(
     private readonly drizzleService: DrizzleService,
     private readonly hashService: passwordService,
   ) {}
+
+  async findCredential(userId: string) {
+    const [record] = await this.drizzleService.client
+      .select()
+      .from(userCredentiaslTable)
+      .where(eq(userCredentiaslTable.userId, userId))
+      .limit(1);
+    return record || null;
+  }
 
   async create(payload: CreateUserInput) {
     const hashedPassword = await this.hashService.hashPassword(
@@ -77,11 +85,11 @@ export class UserRepository {
     return record || null;
   }
 
-  async findUser(email: string, phone: string) {
+  async findUser(value: string) {
     const [record] = await this.drizzleService.client
       .select()
       .from(userTable)
-      .where(or(eq(userTable.email, email), eq(userTable.phone, phone)))
+      .where(or(eq(userTable.email, value), eq(userTable.phone, value)))
       .limit(1);
     return record || null;
   }
