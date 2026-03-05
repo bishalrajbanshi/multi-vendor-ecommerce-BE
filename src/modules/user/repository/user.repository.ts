@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DrizzleService } from 'src/core/drizzle/drizzle.service';
-import { passwordService } from 'src/core/utils/hash-passowrd.service';
+import { passwordService } from 'src/core/common/passowrd.service';
 import { CreateUserInput, UserUpdate } from '../user.type';
 import {
   GenderEnum,
@@ -90,6 +90,15 @@ export class UserRepository {
       .select()
       .from(userTable)
       .where(or(eq(userTable.email, value), eq(userTable.phone, value)))
+      .limit(1);
+    return record || null;
+  }
+
+  async findByEmailOrPhone(email: string, phone: string) {
+    const [record] = await this.drizzleService.client
+      .select()
+      .from(userTable)
+      .where(or(eq(userTable.email, email), eq(userTable.phone, phone)))
       .limit(1);
     return record || null;
   }

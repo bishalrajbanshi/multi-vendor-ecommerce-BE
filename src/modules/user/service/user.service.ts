@@ -7,7 +7,7 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async signupUser(payload: CreateUserInput) {
-    const existUser = await this.userRepository.findUser(
+    const existUser = await this.userRepository.findByEmailOrPhone(
       payload.email,
       payload.phone,
     );
