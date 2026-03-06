@@ -3,7 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRepository } from '../../user/repository/client.repository';
+import { UserRepository } from '../../client/repository/client.repository';
 import { AuthRequest } from '../types/auth.types';
 import { passwordService } from 'src/core/common/passowrd.service';
 import { JwtTokenService } from 'src/modules/auth/services/custom.jwt.service';

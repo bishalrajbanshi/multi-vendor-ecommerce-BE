@@ -10,7 +10,6 @@ import {
   GenderEnum,
 } from 'src/core/drizzle/schema';
 import { eq, or } from 'drizzle-orm';
-import { ClientdeviceInfo } from 'src/modules/auth/types/interface';
 @Injectable()
 export class UserRepository {
   constructor(

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { UAParser } from 'ua-parser-js';
 import { ClientdeviceInfo } from '../types/interface';
-import { ClientDeviceRepository } from 'src/modules/user/repository/client.device.repository';
+import { ClientDeviceRepository } from 'src/modules/client/repository/client.device.repository';
 
 @Injectable()
 export class ClientDeviceService {

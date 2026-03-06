@@ -10,7 +10,7 @@ import {
   pgEnum,
 } from 'drizzle-orm/pg-core';
 
-import { Gender } from 'src/modules/user/user.type';
+import { Gender } from 'src/modules/client/user.type';
 
 // Enum for gender
 export const GenderEnum = pgEnum('gender', Gender);
