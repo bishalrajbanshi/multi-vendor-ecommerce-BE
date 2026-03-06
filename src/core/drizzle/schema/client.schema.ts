@@ -23,10 +23,11 @@ export const clientTable = userSchema.table(
   'clients',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    email: varchar('email', { length: 255 }).notNull(),
+    email: varchar('email', { length: 255 }),
     phone: varchar('phone', { length: 20 }),
     isActive: boolean('is_active').notNull().default(false),
     deleted: boolean('deleted').notNull().default(false),
+    isVerified: boolean('is_verified').notNull().default(false),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()

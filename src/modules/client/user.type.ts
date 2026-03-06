@@ -31,17 +31,11 @@ export type UserProfile = {
 };
 
 export type CreateUserInput = {
-  email: string;
   phone: string;
-  fullName: string;
-  profile?: string;
-  dob?: Date;
-  gender?: Gender;
-  password: string;
 };
+
 
 export type UserUpdate = Partial<Pick<User, 'phone' | 'email'>>;
 export type UserProfileUpdate = Partial<
   Omit<UserProfile, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
 >;
-

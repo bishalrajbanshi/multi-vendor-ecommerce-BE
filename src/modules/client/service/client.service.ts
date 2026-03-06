@@ -7,14 +7,9 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async signupUser(payload: CreateUserInput) {
-    const existUser = await this.userRepository.findByEmailOrPhone(
-      payload.email,
-      payload.phone,
-    );
+    const existUser = await this.userRepository.findByPhone(payload.phone);
     if (existUser) {
-      throw new Error(
-        `User with email ${payload.email} or phone ${payload.phone} already exists`,
-      );
+      throw new Error(`User with phone ${payload.phone} already exists`);
     }
     return this.userRepository.create(payload);
   }

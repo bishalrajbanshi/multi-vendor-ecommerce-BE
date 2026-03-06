@@ -84,6 +84,9 @@ importers:
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.3
+      '@validator':
+        specifier: link:@types/@validator
+        version: link:@types/@validator
       drizzle-kit:
         specifier: ^0.31.9
         version: 0.31.9
@@ -129,6 +132,9 @@ importers:
       typescript-eslint:
         specifier: ^8.20.0
         version: 8.55.0(eslint@9.39.2)(typescript@5.9.3)
+      validator:
+        specifier: ^13.15.26
+        version: 13.15.26
 
 packages:
 

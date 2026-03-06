@@ -6,11 +6,10 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { UserService } from '../service/user.service';
+import { UserService } from '../service/client.service';
 import { CreateUserDto } from '../dto/user.create.dto';
 import { UpdateUserDto } from '../dto/user.update.dto';
-import { UpdateUserProfileDto } from '../dto/user.profile.update.dto';
-import { UserProfileService } from '../service/user.profile.service';
+import { UserProfileService } from '../service/client.profile.service';
 
 @Controller('user')
 export class UserController {

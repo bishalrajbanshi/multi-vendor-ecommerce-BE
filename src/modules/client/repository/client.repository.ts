@@ -4,10 +4,8 @@ import { passwordService } from 'src/core/common/passowrd.service';
 import { CreateUserInput, UserUpdate } from '../user.type';
 import {
   clientCredentialsTable,
-  clientDeviceTable,
   clientProfileTable,
   clientTable,
-  GenderEnum,
 } from 'src/core/drizzle/schema';
 import { eq, or } from 'drizzle-orm';
 @Injectable()
@@ -27,32 +25,14 @@ export class UserRepository {
   }
 
   async create(payload: CreateUserInput) {
-    const hashedPassword = await this.hashService.hashPassword(
-      payload.password,
-    );
+    const [record] = await this.drizzleService.client
+      .insert(clientTable)
+      .values({
+        phone: payload.phone,
+      })
+      .returning();
 
-    return this.drizzleService.client.transaction(async (tx) => {
-      const [user] = await tx
-        .insert(clientTable)
-        .values({
-          email: payload.email,
-          phone: payload.phone,
-        })
-        .returning();
-
-      await tx.insert(clientCredentialsTable).values({
-        clientId: user.id,
-        passwordHash: hashedPassword,
-      });
-
-      await tx.insert(clientProfileTable).values({
-        clientId: user.id,
-        fullName: payload.fullName,
-        profile: payload.profile || null,
-        dob: payload.dob || null,
-        gender: payload.gender,
-      });
-    });
+    return record || null;
   }
 
   async update(userId: string, payload: UserUpdate) {
@@ -116,5 +96,4 @@ export class UserRepository {
       .limit(1);
     return record || null;
   }
-
 }

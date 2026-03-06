@@ -6,7 +6,7 @@ import {
   ParseUUIDPipe,
   Patch,
 } from '@nestjs/common';
-import { UserProfileService } from '../service/user.profile.service';
+import { UserProfileService } from '../service/client.profile.service';
 import { UpdateUserProfileDto } from '../dto/user.profile.update.dto';
 
 @Controller('profile')
