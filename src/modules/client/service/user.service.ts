@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from './user.repository';
-import { CreateUserInput, UserUpdate } from './user.type';
+import { UserRepository } from '../repository/client.repository';
+import { CreateUserInput, UserUpdate } from '../user.type';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async signupUser(payload: CreateUserInput) {
-    const existUser = await this.userRepository.findUser(
+    const existUser = await this.userRepository.findByEmailOrPhone(
       payload.email,
       payload.phone,
     );
@@ -26,5 +26,4 @@ export class UserService {
     }
     return this.userRepository.update(userId, payload);
   }
-  
 }

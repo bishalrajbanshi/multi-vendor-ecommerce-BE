@@ -27,6 +27,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.6",
     "bcrypt": "^6.0.0",
@@ -36,7 +37,8 @@
     "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.8",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "ua-parser-js": "^2.0.9"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

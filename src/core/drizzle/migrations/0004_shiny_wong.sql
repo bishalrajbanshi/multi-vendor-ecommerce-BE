@@ -1,1 +1,0 @@
-ALTER TABLE "auth"."roles" ADD COLUMN "deleted" boolean DEFAULT false NOT NULL;
