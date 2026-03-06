@@ -3,12 +3,14 @@ import { DrizzleService } from 'src/core/drizzle/drizzle.service';
 import { passwordService } from 'src/core/common/passowrd.service';
 import { CreateUserInput, UserUpdate } from '../user.type';
 import {
+  clientCredentialsTable,
+  clientDeviceTable,
+  clientProfileTable,
+  clientTable,
   GenderEnum,
-  userCredentiaslTable,
-  userProfileTable,
-  userTable,
 } from 'src/core/drizzle/schema';
 import { eq, or } from 'drizzle-orm';
+import { ClientdeviceInfo } from 'src/modules/auth/types/interface';
 @Injectable()
 export class UserRepository {
   constructor(
@@ -19,8 +21,8 @@ export class UserRepository {
   async findCredential(userId: string) {
     const [record] = await this.drizzleService.client
       .select()
-      .from(userCredentiaslTable)
-      .where(eq(userCredentiaslTable.userId, userId))
+      .from(clientCredentialsTable)
+      .where(eq(clientCredentialsTable.clientId, userId))
       .limit(1);
     return record || null;
   }
@@ -32,20 +34,20 @@ export class UserRepository {
 
     return this.drizzleService.client.transaction(async (tx) => {
       const [user] = await tx
-        .insert(userTable)
+        .insert(clientTable)
         .values({
           email: payload.email,
           phone: payload.phone,
         })
         .returning();
 
-      await tx.insert(userCredentiaslTable).values({
-        userId: user.id,
+      await tx.insert(clientCredentialsTable).values({
+        clientId: user.id,
         passwordHash: hashedPassword,
       });
 
-      await tx.insert(userProfileTable).values({
-        userId: user.id,
+      await tx.insert(clientProfileTable).values({
+        clientId: user.id,
         fullName: payload.fullName,
         profile: payload.profile || null,
         dob: payload.dob || null,
@@ -56,12 +58,12 @@ export class UserRepository {
 
   async update(userId: string, payload: UserUpdate) {
     const [updatedUser] = await this.drizzleService.client
-      .update(userTable)
+      .update(clientTable)
       .set({
         ...payload,
         updatedAt: new Date(),
       })
-      .where(eq(userTable.id, userId))
+      .where(eq(clientTable.id, userId))
       .returning();
 
     return updatedUser || null;
@@ -70,8 +72,8 @@ export class UserRepository {
   async findByEmail(email: string) {
     const [record] = await this.drizzleService.client
       .select()
-      .from(userTable)
-      .where(eq(userTable.email, email))
+      .from(clientTable)
+      .where(eq(clientTable.email, email))
       .limit(1);
     return record || null;
   }
@@ -79,8 +81,8 @@ export class UserRepository {
   async findById(id: string) {
     const [record] = await this.drizzleService.client
       .select()
-      .from(userTable)
-      .where(eq(userTable.id, id))
+      .from(clientTable)
+      .where(eq(clientTable.id, id))
       .limit(1);
     return record || null;
   }
@@ -88,8 +90,8 @@ export class UserRepository {
   async findUser(value: string) {
     const [record] = await this.drizzleService.client
       .select()
-      .from(userTable)
-      .where(or(eq(userTable.email, value), eq(userTable.phone, value)))
+      .from(clientTable)
+      .where(or(eq(clientTable.email, value), eq(clientTable.phone, value)))
       .limit(1);
     return record || null;
   }
@@ -97,8 +99,8 @@ export class UserRepository {
   async findByEmailOrPhone(email: string, phone: string) {
     const [record] = await this.drizzleService.client
       .select()
-      .from(userTable)
-      .where(or(eq(userTable.email, email), eq(userTable.phone, phone)))
+      .from(clientTable)
+      .where(or(eq(clientTable.email, email), eq(clientTable.phone, phone)))
       .limit(1);
     return record || null;
   }
@@ -106,10 +108,14 @@ export class UserRepository {
   async findByPhone(phone: string) {
     const [record] = await this.drizzleService.client
       .select()
-      .from(userTable)
-      .where(eq(userTable.phone, phone))
-      .leftJoin(userProfileTable, eq(userProfileTable.userId, userTable.id))
+      .from(clientTable)
+      .where(eq(clientTable.phone, phone))
+      .leftJoin(
+        clientProfileTable,
+        eq(clientProfileTable.clientId, clientTable.id),
+      )
       .limit(1);
     return record || null;
   }
+
 }

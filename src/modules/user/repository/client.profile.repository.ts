@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DrizzleService } from 'src/core/drizzle/drizzle.service';
 import { UserProfileUpdate, UserUpdate } from '../user.type';
-import { userProfileTable } from 'src/core/drizzle/schema';
 import { eq } from 'drizzle-orm/sql/expressions/conditions';
+import { clientProfileTable } from 'src/core/drizzle/schema';
 
 @Injectable()
 export class UserProfileRepository {
@@ -10,7 +10,7 @@ export class UserProfileRepository {
 
   async updateProfile(id: string, payload: UserProfileUpdate) {
     const [updatedProfile] = await this.drizzleService.client
-      .update(userProfileTable)
+      .update(clientProfileTable)
       .set({
         fullName: payload.fullName,
         profile: payload.profile,
@@ -18,7 +18,7 @@ export class UserProfileRepository {
         gender: payload.gender,
         updatedAt: new Date(),
       })
-      .where(eq(userProfileTable.userId, id))
+      .where(eq(clientProfileTable.clientId, id))
       .returning();
     return updatedProfile;
   }
@@ -26,8 +26,8 @@ export class UserProfileRepository {
   async findProfile(id: string) {
     const [profile] = await this.drizzleService.client
       .select()
-      .from(userProfileTable)
-      .where(eq(userProfileTable.userId, id));
+      .from(clientProfileTable)
+      .where(eq(clientProfileTable.clientId, id));
     return profile;
   }
 }

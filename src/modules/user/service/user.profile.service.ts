@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserProfileRepository } from '../repository/user.profile.repository';
+import { UserProfileRepository } from '../repository/client.profile.repository';
 import { UserProfileUpdate } from '../user.type';
 
 @Injectable()
