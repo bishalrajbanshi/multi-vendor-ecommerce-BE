@@ -1,14 +1,10 @@
-import { Module } from "@nestjs/common";
-import { passwordService } from "./passowrd.service";
-
-
+import { Module } from '@nestjs/common';
+import { PasswordService } from './passowrd.service';
+import { DrizzleModule } from '../drizzle/drizzle.module';
 
 @Module({
-    imports: [],
-    providers: [
-        passwordService
-    ],
-    exports: []
+  imports: [DrizzleModule],
+  providers: [PasswordService],
+  exports: [PasswordService],
 })
-
 export class CommonModule {}

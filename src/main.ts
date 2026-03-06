@@ -5,9 +5,28 @@ import { GlobalValidationWithSourcePipe } from './core/utils/global-validation-w
 import { CustomResponseInterceptor } from './core/interceptors/response.interceptors';
 import { JsonSyntaxExceptionFilter } from './core/exceptionFilters/syntax-exception.filter';
 import { AllExceptionsFilter } from './core/exceptionFilters/all-exception-filter';
+import session from 'express-session';
+import passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET as string,
+      saveUninitialized: false,
+      resave: false,
+      cookie: {
+        sameSite: 'none', // Allows cross-site cookies
+        secure: false, // Bypass HTTPS requirement (for HTTP testing)
+        httpOnly: true,
+        maxAge: 5 * 60 * 1000,
+      },
+    }),
+  );
+
+  app.use(passport.initialize());
+
   app.useGlobalPipes(new GlobalValidationWithSourcePipe());
   app.useGlobalInterceptors(new CustomResponseInterceptor());
   app.useGlobalFilters(

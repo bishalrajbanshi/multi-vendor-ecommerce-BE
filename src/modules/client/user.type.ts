@@ -34,7 +34,6 @@ export type CreateUserInput = {
   phone: string;
 };
 
-
 export type UserUpdate = Partial<Pick<User, 'phone' | 'email'>>;
 export type UserProfileUpdate = Partial<
   Omit<UserProfile, 'id' | 'userId' | 'createdAt' | 'updatedAt'>

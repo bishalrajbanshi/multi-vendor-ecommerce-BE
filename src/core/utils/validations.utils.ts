@@ -7,4 +7,3 @@ export function isEmail(value: string) {
 export function isPhone(value: string) {
   return validator.isMobilePhone(value);
 }
-

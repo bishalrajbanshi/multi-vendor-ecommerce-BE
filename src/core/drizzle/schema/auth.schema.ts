@@ -24,7 +24,7 @@ export const permissionTable = authSchema.table('permissions', {
   description: varchar('description', { length: 255 }),
   status: boolean('status').notNull().default(true),
   deleted: boolean('deleted').notNull().default(false),
-  deletedAt: timestamp('deleted_at', { withTimezone: true }), 
+  deletedAt: timestamp('deleted_at', { withTimezone: true }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
@@ -64,5 +64,3 @@ export const userPermissionTable = authSchema.table('user_permissions', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
-
-
