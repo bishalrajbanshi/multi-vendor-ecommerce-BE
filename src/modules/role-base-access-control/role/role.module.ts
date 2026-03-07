@@ -6,7 +6,7 @@ import { DrizzleModule } from 'src/core/drizzle/drizzle.module';
 import { DrizzleService } from 'src/core/drizzle/drizzle.service';
 
 @Module({
-  providers: [DrizzleService,RoleRepository,RoleService],
-  controllers: [RoleController]
+  providers: [DrizzleService, RoleRepository, RoleService],
+  controllers: [RoleController],
 })
 export class RoleModule {}

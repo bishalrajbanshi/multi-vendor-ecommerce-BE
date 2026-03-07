@@ -17,7 +17,7 @@ export const paginateData = (
     totalPages,
     currentPage: safePage,
     perPage: safePerPage,
-    offset, 
+    offset,
     limit: safePerPage,
     from,
     to,

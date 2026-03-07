@@ -1,6 +1,5 @@
 export interface CustomJwtPayload {
   id: string;
-  email: string;
 }
 
 type Unit =

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DrizzleService } from 'src/core/drizzle/drizzle.service';
-import { passwordService } from 'src/core/common/passowrd.service';
+import { PasswordService } from 'src/core/common/passowrd.service';
 import { CreateUserInput, UserUpdate } from '../user.type';
 import {
   clientCredentialsTable,
@@ -12,7 +12,7 @@ import { eq, or } from 'drizzle-orm';
 export class UserRepository {
   constructor(
     private readonly drizzleService: DrizzleService,
-    private readonly hashService: passwordService,
+    private readonly hashService: PasswordService,
   ) {}
 
   async findCredential(userId: string) {

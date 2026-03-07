@@ -21,7 +21,7 @@ export class RoleController {
 
   @Post()
   async create(@Body() payload: RoleCreateDto) {
-   return this.service.createService(payload);
+    return this.service.createService(payload);
   }
 
   @Patch(':id')
