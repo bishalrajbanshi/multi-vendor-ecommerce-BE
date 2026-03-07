@@ -7,7 +7,8 @@ import {
   clientProfileTable,
   clientTable,
 } from 'src/core/drizzle/schema';
-import { eq, or } from 'drizzle-orm';
+import { and, eq, or } from 'drizzle-orm';
+import { GoogleSignInRequest } from 'src/modules/auth/types/auth.types';
 @Injectable()
 export class UserRepository {
   constructor(
@@ -95,5 +96,46 @@ export class UserRepository {
       )
       .limit(1);
     return record || null;
+  }
+
+  async findByGoogleAndEmail(googleId: string, email: string) {
+    const [record] = await this.drizzleService.client
+      .select()
+      .from(clientTable)
+      .where(
+        and(eq(clientTable.googleId, googleId), eq(clientTable.email, email)),
+      )
+      .limit(1);
+    return record || null;
+  }
+
+  async googleSignUp(payload: GoogleSignInRequest) {
+    return await this.drizzleService.client.transaction(async (tx) => {
+      const [user] = await tx
+        .insert(clientTable)
+        .values({
+          email: payload.email,
+          googleId: payload.googleId,
+        })
+        .returning();
+
+      await tx.insert(clientProfileTable).values({
+        clientId: user.id,
+        fullName: payload.name,
+        profile: payload.avatar,
+      });
+    });
+  }
+
+  async linkGoogleAccount(userId: string, googleId: string) {
+    return await this.drizzleService.client.transaction(async (tx) => {
+      await tx
+        .update(clientCredentialsTable)
+        .set({
+          passwordHash: null,
+          updatedAt: new Date(),
+        })
+        .where(eq(clientCredentialsTable.clientId, userId));
+    });
   }
 }

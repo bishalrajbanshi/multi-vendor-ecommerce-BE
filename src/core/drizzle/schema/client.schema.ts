@@ -25,6 +25,7 @@ export const clientTable = userSchema.table(
     id: uuid('id').primaryKey().defaultRandom(),
     email: varchar('email', { length: 255 }),
     phone: varchar('phone', { length: 20 }),
+    googleId: varchar('google_id', { length: 255 }).unique(),
     isActive: boolean('is_active').notNull().default(false),
     deleted: boolean('deleted').notNull().default(false),
     isVerified: boolean('is_verified').notNull().default(false),
@@ -76,7 +77,7 @@ export const clientCredentialsTable = userSchema.table(
     clientId: uuid('client_id')
       .notNull()
       .references(() => clientTable.id, { onDelete: 'cascade' }),
-    passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+    passwordHash: varchar('password_hash', { length: 255 }),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -122,20 +123,7 @@ export const clientDeviceTable = userSchema.table(
   ],
 );
 
-// --- GOOGLE OAUTH ---
-export const googleOAuthTable = userSchema.table('google_oauth', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  clientId: uuid('client_id')
-    .notNull()
-    .references(() => clientTable.id, { onDelete: 'cascade' }),
-  googleId: varchar('google_id', { length: 255 }).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-});
+
 
 // --- RELATIONS ---
 export const clientRelations = relations(clientTable, ({ one, many }) => ({
@@ -148,5 +136,4 @@ export const clientRelations = relations(clientTable, ({ one, many }) => ({
     references: [clientCredentialsTable.clientId],
   }),
   devices: many(clientDeviceTable),
-  googleAccounts: many(googleOAuthTable),
 }));
