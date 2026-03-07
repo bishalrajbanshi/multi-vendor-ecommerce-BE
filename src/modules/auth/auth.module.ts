@@ -9,15 +9,17 @@ import { UserModule } from '../client/user.module';
 import { JwtTokenService } from './services/custom.jwt.service';
 import { ClientDeviceService } from './services/client.device.service';
 import { GoogleStrategy } from './strategy/google.strategy';
+import { GoogleSignInService } from './services/google.signin.service';
 
 @Module({
   imports: [DrizzleModule, CommonModule, UserModule, JwtModule, PassportModule],
   controllers: [AuthController],
   providers: [
     AuthService,
+    GoogleStrategy,
     JwtTokenService,
     ClientDeviceService,
-    GoogleStrategy,
+    GoogleSignInService
   ],
 })
 export class AuthModule {}

@@ -7,9 +7,14 @@ import { JsonSyntaxExceptionFilter } from './core/exceptionFilters/syntax-except
 import { AllExceptionsFilter } from './core/exceptionFilters/all-exception-filter';
 import session from 'express-session';
 import passport from 'passport';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  ServeStaticModule.forRoot({
+  rootPath: join(__dirname, '..', 'public'),
+});
 
   app.use(
     session({

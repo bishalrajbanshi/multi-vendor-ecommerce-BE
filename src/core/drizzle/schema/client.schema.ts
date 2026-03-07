@@ -25,7 +25,6 @@ export const clientTable = userSchema.table(
     id: uuid('id').primaryKey().defaultRandom(),
     email: varchar('email', { length: 255 }),
     phone: varchar('phone', { length: 20 }),
-    googleId: varchar('google_id', { length: 255 }).unique(),
     isActive: boolean('is_active').notNull().default(false),
     deleted: boolean('deleted').notNull().default(false),
     isVerified: boolean('is_verified').notNull().default(false),
@@ -41,6 +40,28 @@ export const clientTable = userSchema.table(
     uniqueIndex('client_email_unique').on(table.email),
     uniqueIndex('client_phone_unique').on(table.phone),
     index('client_active_index').on(table.isActive),
+  ],
+);
+
+//----google sign-in client table---
+export const googleSignInClientTable = userSchema.table(
+  'google_sign_in_clients',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    googleId: varchar('google_id', { length: 255 }).unique().notNull(),
+    clientId: uuid('client_id')
+      .notNull()
+      .references(() => clientTable.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('google_sign_in_client_google_id_unique').on(table.googleId),
+    index('google_sign_in_client_client_id_index').on(table.clientId),
   ],
 );
 
@@ -123,8 +144,6 @@ export const clientDeviceTable = userSchema.table(
   ],
 );
 
-
-
 // --- RELATIONS ---
 export const clientRelations = relations(clientTable, ({ one, many }) => ({
   profile: one(clientProfileTable, {
@@ -136,4 +155,5 @@ export const clientRelations = relations(clientTable, ({ one, many }) => ({
     references: [clientCredentialsTable.clientId],
   }),
   devices: many(clientDeviceTable),
+  googleSignInClientTable: many(googleSignInClientTable),
 }));

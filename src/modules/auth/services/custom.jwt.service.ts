@@ -12,18 +12,18 @@ export class JwtTokenService {
 
   generateAccessJwtToken(payload: CustomJwtPayload) {
     return this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('jwt.ACCESS_TOKEN_SECRET'),
+      secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
       expiresIn: this.configService.get<string>(
-        'jwt.ACCESS_EXPIRATION_TIME',
+        'ACCESS_EXPIRATION_TIME',
       ) as StringValue,
     });
   }
 
   generateRefreshJwtToken(payload: CustomJwtPayload) {
     return this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('jwt.REFRESH_TOKEN_SECRET'),
+      secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
       expiresIn: this.configService.get<string>(
-        'jwt.REFRESH_EXPIRATION_TIME',
+        'REFRESH_EXPIRATION_TIME',
       ) as StringValue,
     });
   }

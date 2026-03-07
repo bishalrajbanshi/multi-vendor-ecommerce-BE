@@ -6,9 +6,11 @@ import {
   clientCredentialsTable,
   clientProfileTable,
   clientTable,
+  googleSignInClientTable,
 } from 'src/core/drizzle/schema';
 import { and, eq, or } from 'drizzle-orm';
 import { GoogleSignInRequest } from 'src/modules/auth/types/auth.types';
+import { User } from 'src/modules/auth/decorator/user.decortor';
 @Injectable()
 export class UserRepository {
   constructor(
@@ -58,6 +60,23 @@ export class UserRepository {
     return record || null;
   }
 
+  async findByEmailandGoogleId(email: string) {
+    const [record] = await this.drizzleService.client
+      .select({
+        id: clientTable.id,
+        email: clientTable.email,
+        googleId: googleSignInClientTable.googleId,
+      })
+      .from(clientTable)
+      .leftJoin(
+        googleSignInClientTable,
+        eq(googleSignInClientTable.id, clientTable.id),
+      )
+      .where(eq(clientTable.email, email))
+      .limit(1);
+    return record || null;
+  }
+
   async findById(id: string) {
     const [record] = await this.drizzleService.client
       .select()
@@ -98,13 +117,11 @@ export class UserRepository {
     return record || null;
   }
 
-  async findByGoogleAndEmail(googleId: string, email: string) {
+  async findByGoogleId(googleId: string) {
     const [record] = await this.drizzleService.client
       .select()
-      .from(clientTable)
-      .where(
-        and(eq(clientTable.googleId, googleId), eq(clientTable.email, email)),
-      )
+      .from(googleSignInClientTable)
+      .where(eq(googleSignInClientTable.googleId, googleId))
       .limit(1);
     return record || null;
   }
@@ -115,15 +132,20 @@ export class UserRepository {
         .insert(clientTable)
         .values({
           email: payload.email,
-          googleId: payload.googleId,
         })
         .returning();
+
+      await tx.insert(googleSignInClientTable).values({
+        googleId: payload.googleId,
+        clientId: user.id,
+      });
 
       await tx.insert(clientProfileTable).values({
         clientId: user.id,
         fullName: payload.name,
         profile: payload.avatar,
       });
+      return user;
     });
   }
 

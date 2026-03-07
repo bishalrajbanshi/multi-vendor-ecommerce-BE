@@ -36,6 +36,20 @@
       "when": 1772860276926,
       "tag": "0004_wakeful_steel_serpent",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1772877380914,
+      "tag": "0005_regular_lila_cheney",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1772877438513,
+      "tag": "0006_secret_captain_marvel",
+      "breakpoints": true
     }
   ]
 }
