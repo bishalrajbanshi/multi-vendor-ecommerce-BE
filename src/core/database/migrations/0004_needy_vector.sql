@@ -1,0 +1,1 @@
+ALTER TABLE "customer"."customer_profiles" ADD COLUMN "profile" varchar(255);

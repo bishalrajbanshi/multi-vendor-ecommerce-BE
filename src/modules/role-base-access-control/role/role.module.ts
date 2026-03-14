@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
 import { RoleRepository } from './role.repository';
-import { DrizzleModule } from 'src/core/drizzle/drizzle.module';
-import { DrizzleService } from 'src/core/drizzle/drizzle.service';
+import { DrizzleModule } from 'src/core/database/drizzle.module';
+import { DrizzleService } from 'src/core/database/drizzle.service';
 
 @Module({
   providers: [DrizzleService, RoleRepository, RoleService],

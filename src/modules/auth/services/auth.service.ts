@@ -3,17 +3,17 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRepository } from '../../client/repository/client.repository';
 import { AuthRequest } from '../types/auth.types';
 import { JwtTokenService } from 'src/modules/auth/services/custom.jwt.service';
 import { ClientDeviceService } from './client.device.service';
 import { ClientdeviceInfo } from '../types/interface';
 import { PasswordService } from 'src/core/common/passowrd.service';
+import { CustomerRepository } from 'src/modules/customer/repository/customer.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly repository: UserRepository,
+    private readonly repository: CustomerRepository,
     private readonly passwordService: PasswordService,
     private readonly jwtService: JwtTokenService,
     private readonly device: ClientDeviceService,
@@ -51,7 +51,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    if (!user.isActive || user.deleted) {
+    if (!user.isActive|| user.deleted) {
       throw new ForbiddenException('Account is inactive');
     }
 
