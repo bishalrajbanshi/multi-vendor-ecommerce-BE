@@ -4,14 +4,20 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from 'src/core/common/common.module';
-import { DrizzleModule } from 'src/core/drizzle/drizzle.module';
-import { UserModule } from '../client/user.module';
+import { DrizzleModule } from 'src/core/database/drizzle.module';
 import { JwtTokenService } from './services/custom.jwt.service';
 import { ClientDeviceService } from './services/client.device.service';
 import { GoogleStrategy } from './strategy/google.strategy';
+import { CustomerModule } from '../customer/customer.module';
 
 @Module({
-  imports: [DrizzleModule, CommonModule, UserModule, JwtModule, PassportModule],
+  imports: [
+    DrizzleModule,
+    CommonModule,
+    CustomerModule,
+    JwtModule,
+    PassportModule,
+  ],
   controllers: [AuthController],
   providers: [
     AuthService,

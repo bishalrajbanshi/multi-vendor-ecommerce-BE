@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PasswordService } from './passowrd.service';
-import { DrizzleModule } from '../drizzle/drizzle.module';
+import { DrizzleModule } from '../database/drizzle.module';
 
 @Module({
   imports: [DrizzleModule],

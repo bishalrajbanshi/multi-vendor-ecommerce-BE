@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleSignInRequest } from '../types/auth.types';
-import { UserRepository } from 'src/modules/client/repository/client.repository';
+import { CustomerRepository } from 'src/modules/customer/repository/customer.repository';
 
 @Injectable()
 export class GoogleSignInService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: CustomerRepository) {}
 
   async signInWithGoogle(payload: GoogleSignInRequest) {
-    const user = await this.userRepository.findByGoogleAndEmail(payload.googleId,payload.email);
+    const user = await this.userRepository.findByGoogleAndEmail(
+      payload.googleId,
+      payload.email,
+    );
     if (user) {
       // User already exists, return user data
       return user;
@@ -18,9 +21,7 @@ export class GoogleSignInService {
     }
   }
 
-  private async linkGoogleAccount(email:string) {
-
+  private async linkGoogleAccount(email: string) {
     const user = await this.userRepository.findByEmail(email);
-   
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RoleInsert, RoleUpdate } from './role.type';
-import { DrizzleService } from 'src/core/drizzle/drizzle.service';
-import { roleTable } from 'src/core/drizzle/schema';
+import { DrizzleService } from 'src/core/database/drizzle.service';
+import { roleTable } from 'src/core/database/schema';
 import { eq, like, and } from 'drizzle-orm';
 @Injectable()
 export class RoleRepository {
