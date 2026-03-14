@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@hapi/joi':
+        specifier: ^17.1.1
+        version: 17.1.1
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.13(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -29,6 +32,9 @@ importers:
       '@nestjs/swagger':
         specifier: ^11.2.6
         version: 11.2.6(@nestjs/common@11.1.13(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)
+      '@types/hapi__joi':
+        specifier: ^17.1.15
+        version: 17.1.15
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -718,6 +724,27 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@hapi/address@4.1.0':
+    resolution: {integrity: sha512-SkszZf13HVgGmChdHo/PxchnSaCJ6cetVqLzyciudzZRT0jcOouIF/Q93mgjw8cce+D+4F4C1Z/WrfFN+O3VHQ==}
+    deprecated: Moved to 'npm install @sideway/address'
+
+  '@hapi/formula@2.0.0':
+    resolution: {integrity: sha512-V87P8fv7PI0LH7LiVi8Lkf3x+KCO7pQozXRssAHNXXL9L1K+uyu4XypLXwxqVDKgyQai6qj3/KteNlrqDx4W5A==}
+    deprecated: Moved to 'npm install @sideway/formula'
+
+  '@hapi/hoek@9.3.0':
+    resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
+
+  '@hapi/joi@17.1.1':
+    resolution: {integrity: sha512-p4DKeZAoeZW4g3u7ZeRo+vCDuSDgSvtsB/NpfjXEHTUjSeINAi/RrVOWiVQ1isaoLzMvFEhe8n5065mQq1AdQg==}
+    deprecated: Switch to 'npm install joi'
+
+  '@hapi/pinpoint@2.0.1':
+    resolution: {integrity: sha512-EKQmr16tM8s16vTT3cA5L0kZZcTMU5DUOZTuvpnY738m+jyP3JIUj+Mm1xc1rsLkGBQ/gVnfKYPwOmPg1tUR4Q==}
+
+  '@hapi/topo@5.1.0':
+    resolution: {integrity: sha512-foQZKJig7Ob0BMAYBfcJk8d77QtOe7Wo4ox7ff1lQYoNNAb6jwcY1ncdoy2e9wQZzvNy7ODZCYJkK8kzmcAnAg==}
+
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -1214,6 +1241,9 @@ packages:
 
   '@types/express@5.0.6':
     resolution: {integrity: sha512-sKYVuV7Sv9fbPIt/442koC7+IIwK5olP1KWeD88e/idgoJqDm3JV/YUiPwkoKK92ylff2MGxSz1CSjsXelx0YA==}
+
+  '@types/hapi__joi@17.1.15':
+    resolution: {integrity: sha512-Ehq/YQB0ZqZGObrGngztxtThTiShrG0jlqyUSsNK3cebJSoyYgE/hdZvYt6lH4Wimi28RowDwnr87XseiemqAg==}
 
   '@types/http-errors@2.0.5':
     resolution: {integrity: sha512-r8Tayk8HJnX0FztbZN7oVqGccWgw98T/0neJphO91KkmOzug1KkofZURD4UaD5uH8AqcFLfdPErnBod0u71/qg==}
@@ -4180,6 +4210,28 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
+  '@hapi/address@4.1.0':
+    dependencies:
+      '@hapi/hoek': 9.3.0
+
+  '@hapi/formula@2.0.0': {}
+
+  '@hapi/hoek@9.3.0': {}
+
+  '@hapi/joi@17.1.1':
+    dependencies:
+      '@hapi/address': 4.1.0
+      '@hapi/formula': 2.0.0
+      '@hapi/hoek': 9.3.0
+      '@hapi/pinpoint': 2.0.1
+      '@hapi/topo': 5.1.0
+
+  '@hapi/pinpoint@2.0.1': {}
+
+  '@hapi/topo@5.1.0':
+    dependencies:
+      '@hapi/hoek': 9.3.0
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.7':
@@ -4808,6 +4860,8 @@ snapshots:
       '@types/body-parser': 1.19.6
       '@types/express-serve-static-core': 5.1.1
       '@types/serve-static': 2.2.0
+
+  '@types/hapi__joi@17.1.15': {}
 
   '@types/http-errors@2.0.5': {}
 
