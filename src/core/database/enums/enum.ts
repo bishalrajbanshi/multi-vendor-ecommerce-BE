@@ -1,0 +1,74 @@
+/**
+ * This file defines the BusinessType enum, which represents different types of businesses that a vendor can have in the multi-vendor e-commerce platform. Each business type is represented as a string value, making it easy to store and retrieve from the database. The enum includes common business types such as INDIVIDUAL, RETAILER, WHOLESALER, MANUFACTURER, DISTRIBUTOR, and SERVICE_PROVIDER.
+ */
+export enum BusinessType {
+  INDIVIDUAL = 'INDIVIDUAL',
+  RETAILER = 'RETAILER',
+  WHOLESALER = 'WHOLESALER',
+  MANUFACTURER = 'MANUFACTURER',
+  DISTRIBUTOR = 'DISTRIBUTOR',
+  SERVICE_PROVIDER = 'SERVICE_PROVIDER',
+}
+
+export enum BusinessStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+export enum BussinessApprovalStatus {
+  DRAFT = 'DRAFT',
+  SUBMITTED = 'SUBMITTED',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  REVISIONS_REQUIRED = 'REVISIONS_REQUIRED',
+  SUSPENDED = 'SUSPENDED',
+  DEACTIVATED = 'DEACTIVATED',
+}
+
+export enum WorkflowStatus {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  REJECTED = 'REJECTED',
+}
+
+export enum WorkflowAction {
+  SUBMIT = 'SUBMIT',
+  APPROVE = 'APPROVE',
+  REJECT = 'REJECT',
+  REQUEST_REVISIONS = 'REQUEST_REVISIONS',
+  RESUBMIT = 'RESUBMIT',
+  SUSPEND = 'SUSPEND',
+  DEACTIVATE = 'DEACTIVATE',
+}
+
+export enum WorkflowType {
+  VENDOR_REGISTRATION = 'VENDOR_REGISTRATION',
+  PRODUCT_APPROVAL = 'PRODUCT_APPROVAL',
+  ORDER_FULFILLMENT = 'ORDER_FULFILLMENT',
+  RETURN_PROCESSING = 'RETURN_PROCESSING',
+  DISPUTE_RESOLUTION = 'DISPUTE_RESOLUTION',
+}
+
+export enum currentApprovalStatus {
+  PENDING = 'PENDING',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  REVISIONS_REQUIRED = 'REVISIONS_REQUIRED',
+  SUSPENDED = 'SUSPENDED',
+  DEACTIVATED = 'DEACTIVATED',
+}
+
+export enum SubmissionStatus {
+  DRAFT = 'DRAFT',
+  SUBMITTED = 'SUBMITTED',
+  UNDER_REVIEW = 'UNDER_REVIEW',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  REVISIONS_REQUIRED = 'REVISIONS_REQUIRED',
+  SUSPENDED = 'SUSPENDED',
+  DEACTIVATED = 'DEACTIVATED',
+}

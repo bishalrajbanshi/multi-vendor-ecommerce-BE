@@ -47,9 +47,11 @@ export const customerTable = customerSchema.table(
 // =============================
 
 export const authCredentialTable = customerSchema.table('auth_credentials', {
+  id: uuid('id').primaryKey().defaultRandom(),
+
   customerId: uuid('customer_id')
-    .primaryKey()
-    .references(() => customerTable.id, { onDelete: 'cascade' }),
+    .references(() => customerTable.id, { onDelete: 'cascade' })
+    .notNull().unique(),
 
   passwordHash: varchar('password_hash', { length: 255 }),
 

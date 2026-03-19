@@ -1,0 +1,15 @@
+import { pgSchema, uuid, varchar } from 'drizzle-orm/pg-core';
+import { PgSchema } from '../pgSchema';
+
+
+
+
+export const vendorSchema = pgSchema<PgSchema>('vendor');
+
+
+export const vendorTable = vendorSchema.table('vendor', {
+    id:uuid('id').primaryKey().defaultRandom(),
+    name:varchar('name', { length: 255 }).notNull(),
+    
+
+})

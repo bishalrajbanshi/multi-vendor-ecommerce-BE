@@ -1,5 +1,5 @@
 {
-  "id": "2fe2e366-d3bc-410a-9694-1edf7205d948",
+  "id": "38a286f0-a42f-4aaf-a737-d81aa2254b5d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -8,17 +8,24 @@
       "name": "auth_credentials",
       "schema": "customer",
       "columns": {
-        "user_id": {
-          "name": "user_id",
+        "id": {
+          "name": "id",
           "type": "uuid",
           "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
           "notNull": true
         },
         "password_hash": {
           "name": "password_hash",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -37,13 +44,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "auth_credentials_user_id_customer_id_fk": {
-          "name": "auth_credentials_user_id_customer_id_fk",
+        "auth_credentials_customer_id_customer_id_fk": {
+          "name": "auth_credentials_customer_id_customer_id_fk",
           "tableFrom": "auth_credentials",
           "tableTo": "customer",
           "schemaTo": "customer",
           "columnsFrom": [
-            "user_id"
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -53,7 +60,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "auth_credentials_customer_id_unique": {
+          "name": "auth_credentials_customer_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "customer_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -69,20 +84,20 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
+        "customer_id": {
+          "name": "customer_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "first_name": {
-          "name": "first_name",
+        "full_name": {
+          "name": "full_name",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
-        "last_name": {
-          "name": "last_name",
+        "profile": {
+          "name": "profile",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
@@ -146,13 +161,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "customer_profiles_user_id_customer_id_fk": {
-          "name": "customer_profiles_user_id_customer_id_fk",
+        "customer_profiles_customer_id_customer_id_fk": {
+          "name": "customer_profiles_customer_id_customer_id_fk",
           "tableFrom": "customer_profiles",
           "tableTo": "customer",
           "schemaTo": "customer",
           "columnsFrom": [
-            "user_id"
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -239,7 +254,38 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "email_index": {
+          "name": "email_index",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "phone_index": {
+          "name": "phone_index",
+          "columns": [
+            {
+              "expression": "phone",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
@@ -273,8 +319,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
+        "customer_id": {
+          "name": "customer_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -302,13 +348,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "google_auth_user_id_customer_id_fk": {
-          "name": "google_auth_user_id_customer_id_fk",
+        "google_auth_customer_id_customer_id_fk": {
+          "name": "google_auth_customer_id_customer_id_fk",
           "tableFrom": "google_auth",
           "tableTo": "customer",
           "schemaTo": "customer",
           "columnsFrom": [
-            "user_id"
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -421,29 +467,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "role_permission_unique": {
-          "name": "role_permission_unique",
-          "columns": [
-            {
-              "expression": "role_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "permission_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "role_permissions_role_id_roles_id_fk": {
           "name": "role_permissions_role_id_roles_id_fk",
