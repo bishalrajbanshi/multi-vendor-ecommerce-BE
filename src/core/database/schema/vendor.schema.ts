@@ -7,7 +7,12 @@ import {
 } from 'drizzle-orm/pg-core';
 import { PgSchema } from '../pgSchema';
 import { index } from 'drizzle-orm/pg-core';
-import { BusinessStatus, BusinessType, BussinessApprovalStatus } from '../enums/enum';
+import {
+  BusinessStatus,
+  BusinessType,
+  BussinessApprovalStatus,
+  DocumentType,
+} from '../enums/enum';
 import { zone } from './geograhpy.schema';
 
 export const vendorSchema = pgSchema<PgSchema>('vendor');
@@ -59,14 +64,12 @@ export const businessDetailsTable = vendorSchema.table('business_details', {
     .notNull()
     .default(BusinessStatus.PENDING),
 
-
   isActive: boolean('is_active').notNull().default(false),
 
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deletedAt: timestamp('deleted_at'),
 });
-
 
 export const bussinessKycTable = vendorSchema.table('business_kyc', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -81,19 +84,56 @@ export const bussinessKycTable = vendorSchema.table('business_kyc', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
+export const documentVerificationTable = vendorSchema.table(
+  'document_verification',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    businessKycId: uuid('business_kyc_id')
+      .notNull()
+      .references(() => bussinessKycTable.id, { onDelete: 'cascade' }),
 
-export const documentVerificationTable = vendorSchema.table('document_verification', {
+    verificationStatus: varchar('verification_status', { length: 50 })
+      .$type<BussinessApprovalStatus>()
+      .notNull()
+      .default(BussinessApprovalStatus.DRAFT),
+
+    verifiedAt: timestamp('verified_at'),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  },
+);
+
+export const identityVerificationTable = vendorSchema.table(
+  'identity_verification',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    vendorId: uuid('vendor_id')
+      .notNull()
+      .references(() => vendorTable.id, { onDelete: 'cascade' }),
+    documentNumber: varchar('document_number', { length: 100 }).notNull(),
+      documentType: varchar('document_type', { length: 100 })
+    .$type<DocumentType>()
+    .notNull(),
+
+    isVerified: boolean('is_verified').notNull().default(false),
+    verifiedAt: timestamp('verified_at'),
+
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+
+  },
+);
+
+
+export const documentTable = vendorSchema.table('document', {
   id: uuid('id').primaryKey().defaultRandom(),
-  businessKycId: uuid('business_kyc_id')
+  identityVerificationId: uuid('identity_verification_id')
     .notNull()
-    .references(() => bussinessKycTable.id, { onDelete: 'cascade' }),
+    .references(() => identityVerificationTable.id, { onDelete: 'cascade' }),
+  documentUrl: varchar('document_url', { length: 255 }).notNull(),
+  frontDocumentUrl: varchar('front_document_url', { length: 255 }),
+  backDocumentUrl: varchar('back_document_url', { length: 255 }),
 
-  verificationStatus: varchar('verification_status', { length: 50 })
-    .$type<BussinessApprovalStatus>()
-    .notNull()
-    .default(BussinessApprovalStatus.DRAFT),
-
-  verifiedAt: timestamp('verified_at'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
