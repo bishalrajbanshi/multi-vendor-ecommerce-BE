@@ -29,7 +29,7 @@ export class AuthController {
    */
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  googleCallback(@User() user:GoogleAuthDto) {
-    console.log('Google OAuth callback user:', user);
+  googleCallback(@User() customer:GoogleAuthDto) {
+    console.log('Google OAuth callback user:', customer);
   }
 }
