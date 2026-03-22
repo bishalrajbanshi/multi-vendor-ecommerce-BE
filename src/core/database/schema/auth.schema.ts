@@ -13,9 +13,9 @@ import { customerTable } from './customer.schema';
 // =============================
 // AUTH SCHEMA
 // =============================
-
 export const authSchema = pgSchema<PgSchema>('auth');
 
+//otp table 
 export const otpTable = authSchema.table('otps', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => customerTable.id, {
@@ -34,10 +34,7 @@ export const otpTable = authSchema.table('otps', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
-// =============================
-// ROLES
-// =============================
-
+// role table
 export const roleTable = authSchema.table('roles', {
   id: uuid('id').primaryKey().defaultRandom(),
 
@@ -75,27 +72,6 @@ export const permissionTable = authSchema.table('permissions', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
-
-// =============================
-// USER ROLES
-// =============================
-
-// export const roleTable = authSchema.table(
-//   "user_roles",
-//   {
-//     id: uuid("id").primaryKey().defaultRandom(),
-
-//     userId: uuid("user_id")
-//       .notNull()
-//       .references(() => userTable.id, { onDelete: "cascade" }),
-
-//     roleId: uuid("role_id")
-//       .notNull()
-//       .references(() => roleTable.id, { onDelete: "cascade" }),
-
-//     createdAt: timestamp("created_at").notNull().defaultNow(),
-//   }
-// );
 
 // =============================
 // ROLE PERMISSIONS
