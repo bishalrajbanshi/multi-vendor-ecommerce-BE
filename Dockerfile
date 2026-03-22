@@ -1,25 +1,51 @@
-#step 1: build 
-FROM node:25-alpine3.22 AS builder
+# -------------------------
+# 1. Builder Stage
+# -------------------------
+FROM node:20-alpine AS builder
 
-# step 2 build bash ,git ,and  buid tools 
+# Install required tools
 RUN apk add --no-cache bash git openssh
 
-# seep 3 set working directory 
-WORKDIR /app 
+# Set working directory
+WORKDIR /app
 
-# step 4 copy package.json and package-lock.json to the working directory
+# Copy package files first (for caching)
 COPY package*.json ./
 
-# step 5 install dependencies
+# Install all dependencies (including dev for build)
 RUN npm install
 
-
-# staep 6 copy the rest of the application code to the working directory
+# Copy rest of the code
 COPY . .
 
-# step 7 build the application
+# Build NestJS app
 RUN npm run build
 
-# step 8: production image
+
+# -------------------------
+# 2. Production Stage
+# -------------------------
+FROM node:20-alpine AS production
+
+# Set NODE_ENV
+ENV NODE_ENV=production
+
+# Set working directory
+WORKDIR /app
+
+# Copy only necessary files
+COPY package*.json ./
+
+# Install only production dependencies
+RUN npm install --omit=dev
+
+# Copy built files from builder
+COPY --from=builder /app/dist ./dist
 
 
+
+# Expose port (default NestJS)
+EXPOSE 3000
+
+# Start app
+CMD ["node", "dist/main.js"]
