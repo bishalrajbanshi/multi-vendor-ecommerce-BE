@@ -5,15 +5,9 @@ import { boolean, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { PgSchema } from '../pgSchema';
 import { index } from 'drizzle-orm/pg-core';
 
-// =============================
-// user schema
-// =============================
 
 export const customerSchema = pgSchema<PgSchema>('customer');
 
-// =============================
-// USERS
-// =============================
 export const customerTable = customerSchema.table(
   'customer',
   {

@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthRequest } from '../types/auth.types';
@@ -9,11 +10,15 @@ import { ClientDeviceService } from './client.device.service';
 import { ClientdeviceInfo } from '../types/interface';
 import { PasswordService } from 'src/core/common/passowrd.service';
 import { CustomerRepository } from 'src/modules/customer/repository/customer.repository';
+import { DrizzleService } from 'src/core/database/drizzle.service';
+import { AuthRepository } from '../repository/auth-repository';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly authRepository: AuthRepository,
     private readonly repository: CustomerRepository,
+    private readonly drizzleService: DrizzleService,
     private readonly passwordService: PasswordService,
     private readonly jwtService: JwtTokenService,
     private readonly device: ClientDeviceService,
@@ -51,7 +56,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    if (!user.isActive|| user.deleted) {
+    if (!user.isActive || user.deleted) {
       throw new ForbiddenException('Account is inactive');
     }
 
@@ -79,5 +84,26 @@ export class AuthService {
     const user = await this.validateUser(value);
 
     // send otp to email or phone number
+  }
+
+  /**
+   * sign in superadmin
+   */
+
+  async signInSuperAdmin(payload: AuthRequest) {
+    const record = await this.authRepository.findSuperAdmin(payload.value);
+    if (!record) {
+      throw new NotFoundException(
+        `No super admin found with email or phone: ${payload.value}`,
+      );
+    }
+    const accessToken = await this.jwtService.generateAccessJwtToken({
+      id: record.id,
+    });
+
+    const refreshToken = await this.jwtService.generateRefreshJwtToken({
+      id: record.id,
+    });
+    return { ...record, accessToken, refreshToken };
   }
 }

@@ -5,14 +5,28 @@ import { AuthService } from './services/auth.service';
 import { GoogleAuthGuard } from './guards/google.guards';
 import { User } from './decorator/user.decortor';
 import { GoogleAuthDto } from './dto/google.auth.dto';
+import { GenerateResponseMessage } from 'src/core/helper/generateResponseMessage';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly generateResponse: GenerateResponseMessage,
+  ) {}
 
   @Post()
   async signIn(@Req() request: Request, @Body() payload: LoginDto) {
     return this.authService.signIn(request, payload);
+  }
+
+  @Post('superadmin')
+  async signInSuperAdmin(@Body() payload: LoginDto) {
+    return {
+      data: await this.authService.signInSuperAdmin(payload),
+      message: this.generateResponse.generateSuccessMessage(
+        'Super Admin Login Successfully',
+      ),
+    };
   }
 
   /**
@@ -29,7 +43,7 @@ export class AuthController {
    */
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  googleCallback(@User() customer:GoogleAuthDto) {
+  googleCallback(@User() customer: GoogleAuthDto) {
     console.log('Google OAuth callback user:', customer);
   }
 }
