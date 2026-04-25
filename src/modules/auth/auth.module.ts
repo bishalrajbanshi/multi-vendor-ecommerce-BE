@@ -9,6 +9,8 @@ import { JwtTokenService } from './services/custom.jwt.service';
 import { ClientDeviceService } from './services/client.device.service';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { CustomerModule } from '../customer/customer.module';
+import { AuthRepository } from './repository/auth-repository';
+import { GenerateResponseMessage } from 'src/core/helper/generateResponseMessage';
 
 @Module({
   imports: [
@@ -20,10 +22,12 @@ import { CustomerModule } from '../customer/customer.module';
   ],
   controllers: [AuthController],
   providers: [
+    AuthRepository,
     AuthService,
     JwtTokenService,
     ClientDeviceService,
     GoogleStrategy,
+    GenerateResponseMessage,
   ],
 })
 export class AuthModule {}

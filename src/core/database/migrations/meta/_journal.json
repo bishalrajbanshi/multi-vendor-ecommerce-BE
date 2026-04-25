@@ -15,6 +15,20 @@
       "when": 1773478040447,
       "tag": "0001_magenta_lockjaw",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777136772147,
+      "tag": "0002_outstanding_jubilee",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1777136896911,
+      "tag": "0003_ordinary_black_queen",
+      "breakpoints": true
     }
   ]
 }
