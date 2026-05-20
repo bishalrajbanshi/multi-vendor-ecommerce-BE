@@ -19,7 +19,7 @@ async function bootstrap() {
       cookie: {
         sameSite: 'none', // Allows cross-site cookies
         secure: false, // Bypass HTTPS requirement (for HTTP testing)
-        httpOnly: true,
+        httpOnly: false,
         maxAge: 5 * 60 * 1000,
       },
     }),

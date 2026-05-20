@@ -1,0 +1,1 @@
+ALTER TABLE "auth"."superAdmins" ADD COLUMN "isSystem" boolean DEFAULT false NOT NULL;

@@ -7,7 +7,7 @@ import {
   customerTable,
   googleAuthTable,
 } from 'src/core/database/schema';
-import { and, eq, or } from 'drizzle-orm';
+import { and, eq, or } from 'drizzle-orm/sql/expressions/conditions';
 import { GoogleSignInRequest } from 'src/modules/auth/types/auth.types';
 import { CreateCustomerInput, CustomerUpdate } from '../customer.type';
 @Injectable()

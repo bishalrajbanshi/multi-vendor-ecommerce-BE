@@ -24,6 +24,7 @@ export const superAdmin = authSchema.table('superAdmins', {
     .notNull()
     .$type<Role>()
     .default(Role.SUPERADMIN),
+  isSystem: boolean('isSystem').notNull().default(false),
 
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
@@ -34,7 +35,7 @@ export const superAdmin = authSchema.table('superAdmins', {
  */
 export const vendorTable = authSchema.table('vendors', {
   id: uuid('id').primaryKey().defaultRandom(),
-  
+
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).unique(),
   phone: varchar('phone', { length: 20 }).unique(),
