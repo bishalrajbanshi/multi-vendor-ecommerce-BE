@@ -7,7 +7,6 @@ import {
 } from 'drizzle-orm/pg-core';
 
 import { PgSchema } from '../pgSchema';
-import { Role } from '../enums/role.enum';
 
 export const authSchema = pgSchema<PgSchema>('auth');
 
@@ -20,10 +19,9 @@ export const superAdmin = authSchema.table('superAdmins', {
   email: varchar('email', { length: 255 }).unique(),
   phone: varchar('phone', { length: 20 }).unique(),
   passWord: varchar('password', { length: 255 }).notNull(),
-  role: varchar('role', { length: 50 })
-    .notNull()
-    .$type<Role>()
-    .default(Role.SUPERADMIN),
+  roleId: uuid('roleId')
+  .notNull()
+  .references(() => roleTable.id, { onDelete: 'cascade' }),
   isSystem: boolean('isSystem').notNull().default(false),
 
   createdAt: timestamp('createdAt').notNull().defaultNow(),
@@ -39,6 +37,11 @@ export const vendorTable = authSchema.table('vendors', {
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).unique(),
   phone: varchar('phone', { length: 20 }).unique(),
+  passWord: varchar('password', { length: 255 }).notNull(),
+  roleId: uuid('roleId')
+    .notNull()
+    .references(() => roleTable.id, { onDelete: 'cascade' }),
+  isSystem: boolean('isSystem').notNull().default(false),
 
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
@@ -78,9 +81,9 @@ export const rolePermissionTable = authSchema.table('role_permissions', {
     .notNull()
     .references(() => roleTable.id, { onDelete: 'cascade' }),
 
-  permissionId: uuid('permission_id')
+  permissionId: uuid('permissionId')
     .notNull()
     .references(() => permissionTable.id, { onDelete: 'cascade' }),
 
-  createdAt: timestamp('created_at').notNull().defaultNow(),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
 });
